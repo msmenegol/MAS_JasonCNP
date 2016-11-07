@@ -14,7 +14,12 @@
 
 mas tp_cnp_ag {
 
-    agent initiator
+    agent initiator : initiator.asl{
+      instances: 100
+    }
+    agent participant : participant.asl{
+      instances: 50
+    }
 
     // agent source path
     asl-path: src/agt

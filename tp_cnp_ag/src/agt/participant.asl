@@ -9,22 +9,23 @@
 /* Plans */
 
 +!start
-  <-  +myService(math.ceil(math.random*3));
+  <-  +myService(math.ceil(math.random*10));
       +myStock(10);
       +myPrice(1);
       ?myService(I);
       .print("My service is ", I)
   .
 
-+cfp(Ag,service(I)) : myService(I) & .my_name(Me) & myPrice(P)
++cfp(Ag,service(I)) : myService(I) & .my_name(Me) & myPrice(P) & myStock(S) & S>0
   <-  .send(Ag, tell, propose(Me, service(I), P ));
-      .print("Request for service received");
-      .abolish(cfp(Ag, service(I)));
+      .print("Request for service received from ", Ag);
+      .abolish(cfp(Ag,_));
   .
 
-+cfp(_,service(I)) : not myService(I)
-  <-  .abolish(cfp(_,service(I)));
-      .print("Taking cfp", I, " down.");
++cfp(Ag,service(I)) : .my_name(Me) & (not myService(I) | myStock(0))
+  <-  .send(Ag, tell, refuse(Me,service(I)));
+      .abolish(cfp(Ag,_));
+      //.print("Taking cfp", I, " down.");
   .
 
 +accept(Ag, service(I), P) : myService(I) & .my_name(Me) & myPrice(P) & myStock(S) & S>0
@@ -34,11 +35,12 @@
       .abolish(accept(Ag, service(I), P));
   .
 
-+accept(Ag, service(I), P) : myStock(St) & not St>0
++accept(Ag, service(I), P) : myStock(St) & .my_name(Me) &  not St>0
   <-  .send(Ag, tell, failed(Me, service(I)));
       .abolish(accept(Ag, service(I), P));
       .print("No more items to sell.");
   .
+
 
 
 
