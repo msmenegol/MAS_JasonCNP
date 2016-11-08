@@ -1,0 +1,12 @@
+/* Jason Project */
+
+MAS book_trading {
+
+    infrastructure: Jade
+
+    agents:
+        initiator;
+
+        participant;
+
+}
