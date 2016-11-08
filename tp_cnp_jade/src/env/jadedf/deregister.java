@@ -40,9 +40,10 @@ public class deregister extends DefaultInternalAction {
 				DFAgentDescription list[] = DFService.search(infra, dfd);
 
 				//2. deregister
-				DFService.deregister(infra);
-				dfd = list[0];
-
+				if(list.length>0){
+					DFService.deregister(infra,dfd);
+				//dfd = list[0];
+				}
 				return true;
 
 			} else {

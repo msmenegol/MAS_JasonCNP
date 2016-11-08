@@ -11,8 +11,12 @@
       ?myService(I);
       .print("My service is ", I);
       jadedf.register("tp_cnp_jade","JADE-participant") //Register on the DF
+      !pooling;
   .
 
++!pooling : myStock(S)
+  <- if(S==0){.send(timer, tell, "no_stock", ns);}else{!pooling;};
+  .
 //handle CFP performatives
 //CEP
 +!kqml_received(Sender, cfp, service(I), MsgId) : myService(I) & myStock(S) & S>0	// if I have the service
@@ -26,14 +30,14 @@
 +!kqml_received(Sender, accept_proposal, [service(I),Price], MsgId)
 	:	myService(I) & myStock(S) & S>0 // If I still have the book
 	<- -+myStock(S-1);	//change stock
-		.print("New stock for service ", I, "is ", S-1);
+		//.print("New stock for service ", I, "is ", S-1);
     if(S<=1){//if it's the last piece
       jadedf.deregister("tp_cnp_jade","JADE-participant");
     }
 		.send(Sender, tell, service(I), MsgId); //confirm
   .
 
-+!kqml_receieved(Sender, accept_proposal, _, MsgId)
++!kqml_received(Sender, accept_proposal, _, MsgId)
 	<- .send(Sender, failure, "not available", MsgId).
 
 +!kqml_received(Sender, reject_proposal, _, _).//if proposal is rejected, do nothing

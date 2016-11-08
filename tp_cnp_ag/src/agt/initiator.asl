@@ -7,7 +7,7 @@ amountPaid(0).
 +!initContracts : contracts(NC) & .my_name(Me)
   <-  for (.range(I,1,NC)) {
         .broadcast(tell,cfp(Me,service(I)));
-        .print("Requesting service ", I);
+        //.print("Requesting service ", I);
       }
   .
 
@@ -15,7 +15,7 @@ amountPaid(0).
 //possível TODO: fazer um método de seleção de proposta. Atual é 1st come 1st served
 +propose(Sender,service(I),Price) : not contracted(service(I)) & .my_name(Me)
   <-  .send(Sender, tell, accept(Me, service(I), Price));
-      .print("Accepting contract ", I," from ",Sender);
+      //.print("Accepting contract ", I," from ",Sender);
       +contracted(service(I));// ao aceitar, adiciona como contratado
       //.abolish(propose(_,service(I),_));
   .
@@ -31,7 +31,7 @@ amountPaid(0).
       .abolish(done(_,service(I),_));
       .abolish(propose(_,service(I),_)); //remove todas as propostas relacionadas
       .broadcast(tell, cfp(Me,service(I))); //reinicia contratação daquele serviço
-      .print("Looking for another contract for ", I);
+      //.print("Looking for another contract for ", I);
   .
 //no caso de falha, reinicia o procedimento de contratação
 +failed(Sender, service(I)): .my_name(Me)

@@ -32,7 +32,7 @@ amountPaid(0).
 
 +!ask_prices(service(I)) : vendorList(List)
   <-  for (.member(S, List)){
-        .print("Asking if ", S, " has service ", I);
+        //.print("Asking if ", S, " has service ", I);
 			  .send(S, cfp , service(I));
       }
   .

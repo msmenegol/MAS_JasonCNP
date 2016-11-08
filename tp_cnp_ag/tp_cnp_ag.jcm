@@ -18,7 +18,10 @@ mas tp_cnp_ag {
       instances: 100
     }
     agent participant : participant.asl{
-      instances: 50
+      instances: 25
+    }
+    agent timer : timer.asl{
+      beliefs : np(25)
     }
 
     // agent source path

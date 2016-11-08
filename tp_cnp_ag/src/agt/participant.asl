@@ -13,12 +13,17 @@
       +myStock(10);
       +myPrice(1);
       ?myService(I);
+      !pooling;
       .print("My service is ", I)
+  .
+
++!pooling : myStock(S)
+  <- if(S==0){.send(timer, tell, "no_stock", ns);}else{!pooling;};
   .
 
 +cfp(Ag,service(I)) : myService(I) & .my_name(Me) & myPrice(P) & myStock(S) & S>0
   <-  .send(Ag, tell, propose(Me, service(I), P ));
-      .print("Request for service received from ", Ag);
+      //.print("Request for service received from ", Ag);
       .abolish(cfp(Ag,_));
   .
 
@@ -30,7 +35,7 @@
 
 +accept(Ag, service(I), P) : myService(I) & .my_name(Me) & myPrice(P) & myStock(S) & S>0
   <-  .send(Ag, tell, done(Me, service(I), P));
-      .print("Accepting contract with ", Ag);
+      //.print("Accepting contract with ", Ag);
       -+myStock(S-1);
       .abolish(accept(Ag, service(I), P));
   .
@@ -38,7 +43,7 @@
 +accept(Ag, service(I), P) : myStock(St) & .my_name(Me) &  not St>0
   <-  .send(Ag, tell, failed(Me, service(I)));
       .abolish(accept(Ag, service(I), P));
-      .print("No more items to sell.");
+      //.print("No more items to sell.");
   .
 
 
